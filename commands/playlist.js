@@ -70,6 +70,30 @@ class Playlist extends Command {
             }
         }
 
+        else if (args[0] === "rating") {
+            if (!Number.isInteger(args[1]) && args[1] <= 0) {
+                await message.channel.send(`That is not a valid amount maps. \nExample: \`${client.config.prefix}playlist rating 25 over 90(in %, true rating)\``);
+                return;
+            }
+            if (args[1] > 10000) {
+                await message.channel.send("Sorry, max amount 10000");
+                return;
+            }
+
+            const amount = parseInt(args[1])
+            const type = args[2] === "over" ? "above" : args[2]
+            const rating = args[3]
+
+            if (type !== "above" && type !== "under" || isNaN(rating)) {
+                await message.channel.send(`Invalid Arguments. \nExample: \`${client.config.prefix}playlist rating 25 over 90\``);
+                return;
+            }
+
+            const res = await client.rankbotApi.apiCall(client.config.syncURL + `/rating?a=${amount}&r=${rating}&u=${type}&m=5`);
+            const playlistAttachment = await client.misc.jsonAttachmentCreator(res, "Rating");
+            await message.channel.send(`${message.author}, here is your rating playlist with ${amount} maps rated ${args[2]} ${rating}%.`, playlistAttachment);
+        }
+
         else if (args[0] === "beatsage") {
             const maps = await client.db.collection("beatSaverLocal").find({ automapper: true }).toArray();
             let mapHashes = await hashes(maps);
