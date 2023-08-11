@@ -3,11 +3,11 @@ const Command = require("../core/command/command.js");
 class Playlist extends Command {
     async run(client, message, args) {
         if (args[0] === "help") {
-            await message.channel.send(`Playlist types: \nRandom <amount>\nBeatsage\nMapper <mapper name>\nRanked\n\nExample: \`${client.config.prefix}playlist ranked\``) //\nNoodle\nMappinextensions
+            await message.channel.send(`Playlist types: \nRandom <amount> (<filters>)\nRating <amount> <under/over> <value>\nBeatsage\nMapper <mapper name(s)>\nRanked\n\nExample: \`${client.config.prefix}playlist ranked\`\nMore info: <https://github.com/MakeMonni/RankBot/wiki/Commands#playlist>`) //\nNoodle\nMappinextensions
         }
 
         else if (!args[0]) {
-            await message.channel.send("No playlist type selected. Pick one of the following.\nRandom\nBeatsage\nMapper\nRanked")
+            await message.channel.send("No playlist type selected. Pick one of the following.\nRandom\nRating\nBeatsage\nMapper\nRanked")
             return; // \nNoodle\nMappingextensions
         }
 
@@ -66,7 +66,7 @@ class Playlist extends Command {
 
             }
             else {
-                await message.channel.send(`That is not a valid amount maps for a playlist. \nExample: \`${client.config.prefix}playlist random 25 (optional-> njs:under:14 nps:over:11 length:under:60(in seconds))\``);
+                await message.channel.send(`That is not a valid amount maps. \nExample: \`${client.config.prefix}playlist random 25 (optional-> njs:under:14 nps:over:11 length:under:60(in seconds))\``);
             }
         }
 
@@ -85,7 +85,7 @@ class Playlist extends Command {
             const rating = args[3]
 
             if (type !== "above" && type !== "under" || isNaN(rating)) {
-                await message.channel.send(`Invalid Arguments. \nExample: \`${client.config.prefix}playlist rating 25 over 90\``);
+                await message.channel.send(`Invalid arguments. \nExample: \`${client.config.prefix}playlist rating 25 over 90\``);
                 return;
             }
 
@@ -121,7 +121,7 @@ class Playlist extends Command {
 
         else if (args[0] === "mapper") {
             if (!args[1]) {
-                await message.channel.send("No mapper provided")
+                await message.channel.send(`No mapper provided.\nExample: \`${client.config.prefix}playlist mapper ETAN Joshabi\``)
                 return;
             }
 
@@ -172,7 +172,7 @@ class Playlist extends Command {
             else if (args[1] === "over" || args[1] === "under") {
 
                 if (isNaN(args[2])) {
-                    message.channel.send("Please use a number.");
+                    message.channel.send(`Invalid arguments.\nExample: \`${client.config.prefix}playlist ranked under 9\``);
                     return;
                 }
                 let finder;
@@ -202,7 +202,7 @@ class Playlist extends Command {
         }
 
         else {
-            await message.channel.send(`Not a valid play category, use ${client.config.prefix}playlist help`)
+            await message.channel.send(`Not a valid category, use ${client.config.prefix}playlist help`)
         }
     }
 }
